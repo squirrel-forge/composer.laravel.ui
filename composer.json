@@ -1,0 +1,41 @@
+{
+    "name": "squirrel-forge/lara-ui",
+    "description": "Squirrel-Forge Laravel Ui Abstracts and Components",
+    "version": "0.1.0",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel Hartwell aka. siux",
+            "email": "me@siux.info",
+            "homepage": "https://siux.info",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "laravel/framework": ">=10.0",
+        "ext-mbstring": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "SquirrelForge\\Laravel\\Ui\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+        "laravel": {
+            "providers": [
+                "SquirrelForge\\Laravel\\Ui\\Providers\\ServiceProvider"
+            ]
+        }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:squirrel-forge/composer.laravel.ui.git",
+            "no-api": true
+        }
+    ]
+}
