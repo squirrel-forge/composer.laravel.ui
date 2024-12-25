@@ -1,4 +1,5 @@
 <dialog open>
+    <h4>squirrel-forge ui v{{ \SquirrelForge\Laravel\Ui\Service::VERSION }}</h4>
     <p><strong>Locale:</strong> <em>{!! app()->currentLocale() !!}</em></p>
     <p><strong>Params:</strong></p>
     <pre><code>GET {!! var_export($_GET, true) !!}</code></pre>

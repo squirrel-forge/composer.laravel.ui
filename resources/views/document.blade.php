@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
+    @yield('page_first','')
     {!! SqfUi::metaTags() !!}
     @yield('page_meta','')
     @stack('styles')
