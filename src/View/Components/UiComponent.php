@@ -7,13 +7,63 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\Component as ViewComponent;
 
+/**
+ * Ui Component
+ * Helpers and Abstracts
+ */
 abstract class UiComponent extends ViewComponent
 {
+    /** @var array $boolFalseValues Values that match an explicit false. */
     public static array $boolFalseValues = [0, false, 'false', 'off'];
 
+    /** @var array $boolTrueValues Values that match an explicit true. */
+    public static array $boolTrueValues = [1, true, 'true', 'on'];
+
+    /**
+     * Get merged falsy values
+     * @param array $with
+     * @return array
+     */
     public static function boolFalsy(array $with = []): array
     {
         return array_merge([], static::$boolFalseValues, $with);
+    }
+
+    /**
+     * Get merged truthy values
+     * @param array $with
+     * @return array
+     */
+    public static function boolTruthy(array $with = []): array
+    {
+        return array_merge([], static::$boolTrueValues, $with);
+    }
+
+    /**
+     * Value is falsy
+     * @param mixed $value
+     * @param array $falsyToo
+     * @return bool
+     */
+    public static function isFalsy(mixed $value, array $falsyToo = []): bool
+    {
+        if (isset($value) && is_string($value)) $value = mb_strtolower(trim($value));
+        if (empty($value)) return true;
+        if (in_array($value, static::boolFalsy($falsyToo), true)) return true;
+        return false;
+    }
+
+    /**
+     * Value is truthy
+     * @param mixed $value
+     * @param array $truthyToo
+     * @return bool
+     */
+    public static function isTruthy(mixed $value, array $truthyToo = []): bool
+    {
+        if (isset($value) && is_string($value)) $value = mb_strtolower(trim($value));
+        if (in_array($value, static::boolTruthy($truthyToo), true)) return true;
+        return false;
     }
 
     /**
@@ -23,6 +73,11 @@ abstract class UiComponent extends ViewComponent
         //
     }
 
+    /**
+     * Set component properties
+     * @param array $props
+     * @return void
+     */
     protected function setProperties(array $props): void
     {
         foreach ($props as $name => $value) {
@@ -37,18 +92,16 @@ abstract class UiComponent extends ViewComponent
 
     /**
      * Get the view / contents that represent the component.
+     * @return View|Closure|string
      */
     public function render(): View|Closure|string
     {
-        $instance = $this;
-        $name = str_replace('\\','.', mb_strtolower(explode('\\Ui\\', static::class)[1]));
-        return function (array $data) use ($name, $instance) {
-            Log::debug($this === $instance);
-            if (method_exists($instance, 'extendViewData')) {
-                $instance->extendViewData($data, $name);
+        $name = str_replace('\\','.', mb_strtolower(explode('\\View\\', static::class)[1]));
+        return function (array $data) use ($name) {
+            if (method_exists($this, 'extendViewData')) {
+                $this->extendViewData($data, $name);
             }
-            Log::debug($data);
-            return view('sqf-ui::components.ui.' . $name, $data);
+            return view('sqf-ui::' . $name, $data);
         };
     }
 }

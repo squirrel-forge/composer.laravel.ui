@@ -15,22 +15,18 @@
         $attributes = $attributes->merge(['enctype' => 'multipart/form-data']);
     }
 @endphp
-<form
-    is="ui-form"
-    {!! $attributes->merge(['class' => 'ui-form'])->filter(fn ($value, $key) => !in_array($key, ['no-csrf'])) !!}
-    action="{!! !empty($route) ? route($route, $params, $absolute) : '' !!}"
->
-    @if(!isset($attributes['no-csrf']) || !in_array($attributes['no-csrf'], \SquirrelForge\LarUi\View\Components\Component::boolFalsy(['no-csrf'])))
+<form is="ui-form" {!! $attributes->merge(['class' => 'ui-form']) !!}>
+    @if(!\SquirrelForge\Laravel\Ui\View\Components\UiComponent::isTruthy($noCsrf, ['no-csrf']))
         @csrf
     @endif
     @if($realMethod !== $attributes->get('method'))
         @method($realMethod)
     @endif
-    @if(!isset($attributes['no-wrap']) || !in_array($attributes['no-wrap'], [0, false, 'false', 'off', 'no-wrap']))
-    <div class="ui-wrap ui-wrap--form">
+    @if(!\SquirrelForge\Laravel\Ui\View\Components\UiComponent::isTruthy($noWrap, ['no-wrap']))
+    <{!! $wrapTag ?? 'div' !!} class="ui-wrap ui-wrap--form {{ $wrapClasses ?? '' }}">
     @endif
         {!! $slot !!}
-    @if(!isset($attributes['no-wrap']) || !in_array($attributes['no-wrap'], [0, false, 'false', 'off', 'no-wrap']))
-    </div>
+    @if(!\SquirrelForge\Laravel\Ui\View\Components\UiComponent::isTruthy($noWrap, ['no-wrap']))
+    </{!! $wrapTag ?? 'div' !!}>
     @endif
 </form>

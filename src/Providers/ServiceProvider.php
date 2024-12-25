@@ -4,9 +4,9 @@ namespace SquirrelForge\Laravel\Ui\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider as Provider;
-use SquirrelForge\Laravel\Ui\View\Components\Ui\Button;
-use SquirrelForge\Laravel\Ui\View\Components\Ui\Fieldset;
-use SquirrelForge\Laravel\Ui\View\Components\Ui\Form;
+use SquirrelForge\Laravel\Ui\View\Components\Button;
+use SquirrelForge\Laravel\Ui\View\Components\Fieldset;
+use SquirrelForge\Laravel\Ui\View\Components\Form;
 
 /**
  * Module service provider

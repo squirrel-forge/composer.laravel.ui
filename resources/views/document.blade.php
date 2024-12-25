@@ -3,17 +3,18 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
-    <meta content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+    {!! SqfUi::metaTags() !!}
     @yield('page_meta','')
     @stack('styles')
+    @yield('page_head','')
 </head>
-<body>
+<body {!! SqfUi::bodyAttributes() !!}>
 @yield('page_before','')
 @yield('page_content')
 @yield('page_after','')
 @yield('page_end','')
 @stack('scripts')
 @include('sqf-ui::debugger')
+@yield('page_final','')
 </body>
 </html>
