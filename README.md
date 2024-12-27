@@ -3,7 +3,8 @@
 
 ### Table of Contents
 
- - []()
+ - [View Components](#view-components)
+ - [Document template](#document-template)
 
 ## Module information
 
@@ -16,4 +17,63 @@ Composer repository entry:
     "url": "git@github.com:squirrel-forge/composer.laravel.ui.git",
     "no-api": true
 }
+```
+
+## View Components
+
+### Form
+### Fieldset
+### Button
+### Input
+
+## Document template
+
+### Render structure
+
+ - head
+   - @section page_first
+   - Generated meta data.
+   - @section page_meta
+   - @stack styles
+   - @section page_head
+ - body
+   - @section page_before
+   - @section page_content
+   - @section page_after
+   - @section page_end
+   - @stack scripts
+   - @section page_final
+
+### Adding tags to the head
+
+Set meta tags via the facade as following:
+
+```php
+SqfUi::meta([
+    [
+        '_tag' => 'title',
+        '_html' => 'Page title',
+    ],
+    [
+        'name' => 'description',
+        'content' => 'Page description.',
+    ],
+    [
+        '_tag' => 'link',
+        'rel'  => 'shortcut icon',
+        'href' => '/favicon.ico',
+        'type' => 'image/vnd.microsoft.icon',
+    ],
+]);
+```
+
+### Adding attributes to the body
+
+Add classes or attributes to the page body as following:
+
+```php
+SqfUi::body([
+    'class' => 'page-body',
+    'data-attribute' => 'value',
+]);
 ```
