@@ -4,45 +4,55 @@ namespace SquirrelForge\Laravel\Ui\View\Components;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use function App\View\Components\Ui\old;
-use function App\View\Components\Ui\session;
 
 class Input extends UiComponent
 {
-    // TODO: add "bind" method/attribute to automatically bind to old/input/model value!?
-    protected static array $noValueAttributeTypes = ['select', 'textarea', 'password'];
-    protected static array $attributesFilter = [];
-    public ?string $label = null;
-    public bool $labelAfter = false;
-    public ?array $errorMessages;
-    public ?array $dataList;
-    public $bind = null;
+    public null|bool|Model $bind;
+    public string $label;
+    public bool $labelAfter;
+    public string $labelTag;
+    public string $labelClasses;
+    public string $wrapClasses;
+    public array $errorMessages;
+    public bool $noErrors;
+    public array $dataList;
+    public bool $forgetValue;
+    protected static array $noValueAttributeTypes = ['select', 'checkbox', 'radio', 'password'];
 
     /**
      * Create a new component instance.
      */
     public function __construct(
-        string $label = null,
-        bool $labelAfter = false,
-        ?array $errorMessages = null,
-        ?array $dataList = null,
         $bind = null,
+        string $label = '',
+        bool $labelAfter = false,
+        string $labelTag = 'strong',
+        string $labelClasses = '',
+        string $wrapClasses = '',
+        array $errorMessages = [],
+        bool $noErrors = false,
+        array $dataList = [],
+        bool $forgetValue = false,
     ) {
         $this->setProperties([
+            'bind' => $bind,
             'label' => $label,
             'labelAfter' => $labelAfter,
-            'bind' => $bind,
+            'labelTag' => $labelTag,
+            'labelClasses' => $labelClasses,
+            'wrapClasses' => $wrapClasses,
             'errorMessages' => $errorMessages,
+            'noErrors' => $noErrors,
             'dataList' => $dataList,
+            'forgetValue' => $forgetValue,
         ]);
-        parent::__construct();
     }
 
     protected function inputBind($value): null|bool|Model
     {
         if (empty($value)) return null;
         if ($value instanceof Model) return $value;
-        if (in_array($value, [true, 1, '1', 'true'])) return true;
+        if (static::isTruthy($value, ['bind'])) return true;
         return false;
     }
 
@@ -57,29 +67,39 @@ class Input extends UiComponent
                 $data['attributes']['type'] = 'text';
             }
             if ($this->bind) {
-                if (empty($data['errorMessages'])) {
-                    $data['errorMessages'] = $this->getFieldErrors($name);
-                }
                 if (empty($data['attributes']['value']) && !in_array($data['attributes']['type'], static::$noValueAttributeTypes)) {
                     if ($this->bind === true) {
-                        $data['attributes']['value'] = old($name) ?? '';
+                        $data['attributes']['value'] = $this->forgetValue ? '' : old($name) ?? '';
+                    } else {
+                        $data['attributes']['value'] = $this->forgetValue ? $this->bind->{$name} : old($name) ?? $this->bind->{$name};
+                    }
+                }
+                if (!$this->forgetValue && in_array($data['attributes']['type'], ['checkbox', 'radio'])) {
+                    if ($this->bind === true) {
+                        if (!empty($data['attributes']['value'])) {
+                            if (old($name) === $data['attributes']['value']) {
+                                $data['attributes']['checked'] = '';
+                            }
+                        } else if (static::isTruthy(old($name))) {
+                            $data['attributes']['checked'] = '';
+                        }
+                    } else if (!empty($data['attributes']['value'])) {
+                        if (old($name) ?? $this->bind->{$name} === $data['attributes']['value']) {
+                            $data['attributes']['checked'] = '';
+                        }
+                    } else if (static::isTruthy(old($name) ?? $this->bind->{$name})) {
+                        $data['attributes']['checked'] = '';
+                    }
+                }
+                if (!$this->forgetValue && $data['attributes']['type'] === 'select' && !empty($this->dataList)) {
+                    if ($this->bind === true) {
+                        if (old($name) || isset($data['attributes']['value'])) $data['attributes']['value'] = old($name) ?? $data['attributes']['value'];
                     } else {
                         $data['attributes']['value'] = old($name) ?? $this->bind->{$name};
                     }
                 }
             }
-            /*
-            if (!in_array($data['attributes']['type'], static::$noValueAttributeTypes)) {
-                if (empty($data['attributes']['value'])) {
-                    $data['attributes']['value'] = $this->value ?? old($name);
-                }
-            }
-            if ($data['attributes']['type'] === 'checkbox') {
-                $data['attributes']['checked'] = (bool)($this->value ?? old($name));
-                if ($this->attrValue) $data['attributes']['value'] = $this->attrValue;
-            }
-            */
-            if (!empty($this->dataList) && empty($data['attributes']['list'])) {
+            if ($data['attributes']['type'] !== 'select' && !empty($this->dataList) && empty($data['attributes']['list'])) {
                 $data['attributes']['list'] = $name . '-' . Str::uuid();
             }
         }
@@ -92,7 +112,7 @@ class Input extends UiComponent
         }
         return null;
     }
-    protected function getFieldErrors(string $name): ?array
+    public static function getFieldErrors(string $name): ?array
     {
         $errors = session()->get('errors');
         if (!empty($errors) && $errors->has($name)) {

@@ -67,13 +67,6 @@ abstract class UiComponent extends ViewComponent
     }
 
     /**
-     * Create a new component instance.
-     */
-    public function __construct() {
-        //
-    }
-
-    /**
      * Set component properties
      * @param array $props
      * @return void

@@ -54,7 +54,6 @@ class Button extends UiComponent
             'iconAfter' => $iconAfter,
             'iconAfterClasses' => $iconAfterClasses,
         ]);
-        parent::__construct();
     }
 
     /**

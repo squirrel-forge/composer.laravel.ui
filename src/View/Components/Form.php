@@ -54,7 +54,6 @@ class Form extends UiComponent
             'wrapTag' => $wrapTag,
             'wrapClasses' => $wrapClasses,
         ]);
-        parent::__construct();
     }
 
     /**

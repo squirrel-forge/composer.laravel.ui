@@ -1,36 +1,56 @@
 @php
-    $wrapperClasses = ['ui-input', 'ui-input--' . $attributes->get('type')];
+    $_internal_wrap_classes = 'ui-input ui-input--' . $attributes['type'] . ' ' . ($_internal_wrap_classes ?? '');
     if (!empty($attributes->get('required'))) {
-        $wrapperClasses[] = 'ui-input--required';
+        $_internal_wrap_classes .= ' ui-input--required';
     }
-    if (!empty($fieldErrors)) {
-        $wrapperClasses[] = 'ui-input--error';
-        $wrapperClasses[] = 'ui-input--error-visible';
+    if (!$noErrors && $bind && empty($errorMessages)) {
+        $errorMessages = \SquirrelForge\Laravel\Ui\View\Components\Input::getFieldErrors($attributes['name']);
+    }
+    if (!empty($errorMessages)) {
+        $_internal_wrap_classes .= ' ui-input--error ui-input--error-visible';
     }
 @endphp
-<label class="{!! join(' ', $wrapperClasses) !!}">
-    @if(!empty($label) && !$labelAfter)
-        <{!! $labelTag ?? 'strong' !!} class="ui-input__label">{!! $label !!}</{!! $labelTag ?? 'strong' !!}>
+<label {!! $attributes->merge(['class' => $_internal_wrap_classes])->filter(fn ($value, $key) => $key === 'class') !!}>
+    @if(!empty($label) && !\SquirrelForge\Laravel\Ui\View\Components\UiComponent::isTruthy($labelAfter, ['label-after']))
+        <{!! $labelTag ?? 'strong' !!} class="ui-input__label {{ $labelClasses }}">{!! $label !!}</{!! $labelTag ?? 'strong' !!}>
     @endif
     <span class="ui-input__input">
-        @if($attributes->get('type') === 'select')
-            @php $attributes['type'] = null; @endphp
-            <select {!! $attributes !!}>
-                {!! $slot !!}
+        @if($attributes['type'] === 'select')
+            @php
+                $selectedValue = $attributes['value'] ?? null;
+                $attributes['type'] = null;
+                $attributes['value'] = null;
+            @endphp
+            <select {!! $attributes->filter(fn ($value, $key) => $key !== 'class') !!}>
+                @if($slot->isEmpty() && !empty($dataList))
+                    @foreach($dataList as $_internal_data_list_key => $_internal_data_list_value)
+                        <option value="{{ is_string($_internal_data_list_key) ? $_internal_data_list_key : $_internal_data_list_value }}"
+                            {!! $selectedValue === (is_string($_internal_data_list_key) ? $_internal_data_list_key : $_internal_data_list_value) ? ' selected' : '' !!}>{{ $_internal_data_list_value }}</option>
+                    @endforeach
+                @else
+                    {!! $slot !!}
+                @endif
             </select>
+        @elseif($attributes['type'] === 'textarea')
+            @php
+                $textAreaValue = $attributes['value'] ?? '';
+                $attributes['type'] = null;
+                $attributes['value'] = null;
+            @endphp
+            <textarea {!! $attributes->filter(fn ($value, $key) => $key !== 'class') !!}>{{ $textAreaValue }}</textarea>
         @else
-            <input {!! $attributes !!} />
+            <input {!! $attributes->filter(fn ($value, $key) => $key !== 'class') !!} />
             @if(!empty($dataList) && !empty($attributes['list']))
                 <datalist id="{{ $attributes['list'] }}">
-                    @foreach($dataList as $dlK => $dlV)
-                        <option value="{{ is_string($dlK) ? $dlK : $dlV }}">{{ $dlV }}</option>
+                    @foreach($dataList as $_internal_data_list_key => $_internal_data_list_value)
+                        <option value="{{ is_string($_internal_data_list_key) ? $_internal_data_list_key : $_internal_data_list_value }}">{{ $_internal_data_list_value }}</option>
                     @endforeach
                 </datalist>
             @endif
         @endif
     </span>
-    @if(!empty($label) && $labelAfter)
-        <{!! $labelTag ?? 'strong' !!} class="ui-input__label">{!! $label !!}</{!! $labelTag ?? 'strong' !!}>
+    @if(!empty($label) && \SquirrelForge\Laravel\Ui\View\Components\UiComponent::isTruthy($labelAfter, ['label-after']))
+        <{!! $labelTag ?? 'strong' !!} class="ui-input__label {{ $labelClasses }}">{!! $label !!}</{!! $labelTag ?? 'strong' !!}>
     @endif
     <{!! $errorTag ?? 'em' !!} class="ui-input__error">
     @if(!empty($errorMessages))
