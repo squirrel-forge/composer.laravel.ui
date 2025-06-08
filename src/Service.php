@@ -12,7 +12,7 @@ use Illuminate\View\ComponentAttributeBag;
 class Service {
 
     /** @type string Package version. */
-    const VERSION = '0.5.1';
+    const VERSION = '0.5.2';
 
     /** @var string|null $canonical Runtime custom canonical url. */
     protected ?string $canonical = null;

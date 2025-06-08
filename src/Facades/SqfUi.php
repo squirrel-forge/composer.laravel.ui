@@ -13,6 +13,7 @@ use SquirrelForge\Laravel\Ui\Service;
  * @method static string metaTags() Get the page meta tags.
  * @method static void body(array $data, bool $replace = false) Set runtime body attributes.
  * @method static \Illuminate\View\ComponentAttributeBag bodyAttributes() Get body attributes bag.
+ * @method static \Illuminate\View\ComponentAttributeBag attributes(string $name, array $attributes, bool $replace = false) Set/get runtime named attributes
  * @method static null|string getCanonicalUrl() Get canonical url.
  * @method static string renderTag(array $attributes) Render tag.
  */
