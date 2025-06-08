@@ -12,7 +12,7 @@ use Illuminate\View\ComponentAttributeBag;
 class Service {
 
     /** @type string Package version. */
-    const VERSION = '0.3.0';
+    const VERSION = '0.5.0';
 
     /** @var string|null $canonical Runtime custom canonical url. */
     protected ?string $canonical = null;
@@ -25,6 +25,9 @@ class Service {
 
     /** @var ComponentAttributeBag $bodyAttributes Runtime body attributes to be used. */
     protected ComponentAttributeBag $bodyAttributes;
+
+    /** @var ComponentAttributeBag[] $attributeBags Runtime dynamic attributes to be used. */
+    protected array $attributeBags = [];
 
     /**
      * Construct the service.
@@ -72,6 +75,23 @@ class Service {
     }
 
     /**
+     * Set/get runtime named attributes
+     * @param string $name
+     * @param array $attributes
+     * @param bool $replace
+     * @return ComponentAttributeBag
+     */
+    public function attributes(string $name, array $attributes, bool $replace = false): ComponentAttributeBag
+    {
+        if ($replace || !isset($this->attributeBags[$name])) {
+            $this->attributeBags[$name] = new ComponentAttributeBag($attributes);
+        } else {
+            $this->attributeBags[$name] = $this->attributeBags[$name]->merge($attributes);
+        }
+        return $this->attributeBags[$name];
+    }
+
+    /**
      * Get page meta tags.
      * @return string
      */
@@ -82,7 +102,7 @@ class Service {
         // Use global and runtime meta data
         $data = array_merge(config('sqf-ui.meta.global', []), $this->metaData);
 
-        // Add canonical link if avaialble
+        // Add canonical link if available
         $canonical = $this->getCanonicalUrl();
         if ($canonical) $data[] = ['_tag' => 'link', 'rel' => 'canonical', 'href' => $canonical];
 
@@ -125,7 +145,7 @@ class Service {
         $realRouteName = Route::currentRouteName();
         $routeName = 'undefined';
         if (!empty($realRouteName)) {
-            $routeName = Str::slug(preg_replace('/[.]+/', '-', $realRouteName),'-');
+            $routeName = Str::slug(preg_replace('/[.:]+/', '-', $realRouteName),'-');
         }
         $attributes = [
             'class' => 'ui-page ' . $routeName,
