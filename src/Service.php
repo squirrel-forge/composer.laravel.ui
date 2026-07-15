@@ -14,7 +14,7 @@ use const SquirrelForge\Laravel\CoreSupport\VERSION as CoreSupportVERSION;
 class Service {
 
     /** @type string Package version. */
-    const string VERSION = '0.6.0';
+    const string VERSION = '0.6.1';
 
     /**
      * @var array $versions Collection of software versions
@@ -107,13 +107,29 @@ class Service {
     /**
      * Set runtime meta tags.
      * @param null|array $data
-     * @param bool $replace
+     * @param bool|callable $replace
      * @return void
      */
-    public function meta(?array $data = null, bool $replace = false): void
+    public function meta(?array $data = null, bool|callable $replace = false): void
     {
-        if ($replace) $this->metaData = [];
-        $this->metaData = array_merge($this->metaData, $data ?? []);
+        if (is_bool($replace) && $replace) $this->metaData = [];
+        if (is_callable($replace)) {
+            $append = [];
+            foreach ($data as $new_entry) {
+                $did_replace = false;
+                foreach ($this->metaData as $key => $old_entry) {
+                    if (call_user_func_array($replace, [$old_entry, $new_entry])) {
+                        $this->metaData[$key] = $new_entry;
+                        $did_replace = true;
+                        break;
+                    }
+                }
+                if (!$did_replace) $append[] = $new_entry;
+            }
+            if (!empty($append)) $this->metaData = array_merge($this->metaData, $append);
+        } else {
+            $this->metaData = array_merge($this->metaData, $data ?? []);
+        }
     }
 
     /**
@@ -170,7 +186,7 @@ class Service {
         foreach ($data as $attributes) {
             $rendered[] = $this->renderTag('meta', $attributes);
         }
-        return implode('', $rendered);
+        return implode("\n", $rendered);
     }
 
     /**
@@ -205,10 +221,13 @@ class Service {
         if (!empty($realRouteName)) {
             $routeName = Str::slug(preg_replace('/[.:]+/', '-', $realRouteName),'-');
         }
-        $attributes = [
-            'class' => 'ui-page ' . $routeName,
-            'data-route' => $routeName,
-        ];
+        $defaultClass = config('sqf-ui.body.defaultClass', '');
+        $routeClassPrefix = config('sqf-ui.body.routeClassPrefix', '');
+        $attributes = [];
+        if (!empty($defaultClass)) {
+            $attributes['class'] = $defaultClass . ' ' . $routeClassPrefix . $routeName;
+        }
+        $attributes['data-route'] = $routeName;
         return $this->bodyAttributes->merge($attributes);
     }
 
