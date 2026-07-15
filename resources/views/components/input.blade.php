@@ -31,6 +31,15 @@
                     {!! $slot !!}
                 @endif
             </select>
+            @if(in_array($attributes['type'], \SquirrelForge\Laravel\Ui\View\Components\Input::$hasPseudo))
+                <span class="ui-input__pseudo">
+                    @if (isset($pseudo) && !$pseudo->isEmpty())
+                        {!! $pseudo !!}
+                    @elseif(!empty($pseudoIcon))
+                        <span class="ui-icon {{ $iconClasses ?? '' }}" data-icon="{{ $pseudoIcon }}"></span>
+                    @endif
+                </span>
+            @endif
         @elseif($attributes['type'] === 'textarea')
             @php
                 $textAreaValue = $attributes['value'] ?? '';
@@ -40,6 +49,15 @@
             <textarea {!! $attributes->filter(fn ($value, $key) => $key !== 'class') !!}>{{ $textAreaValue }}</textarea>
         @else
             <input {!! $attributes->filter(fn ($value, $key) => $key !== 'class') !!} />
+            @if(in_array($attributes['type'], \SquirrelForge\Laravel\Ui\View\Components\Input::$hasPseudo))
+                <span class="ui-input__pseudo">
+                    @if(isset($pseudo) && !$pseudo->isEmpty())
+                        {!! $pseudo !!}
+                    @elseif(!empty($pseudoIcon))
+                        <span class="ui-icon {{ $iconClasses ?? '' }}" data-icon="{{ $pseudoIcon }}"></span>
+                    @endif
+                </span>
+            @endif
             @if(!empty($dataList) && !empty($attributes['list']))
                 <datalist id="{{ $attributes['list'] }}">
                     @foreach($dataList as $_internal_data_list_key => $_internal_data_list_value)

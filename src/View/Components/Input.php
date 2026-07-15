@@ -17,7 +17,10 @@ class Input extends UiComponent
     public bool $noErrors;
     public array $dataList;
     public bool $forgetValue;
+    public string $pseudoIcon;
+    public string $iconClasses;
     protected static array $noValueAttributeTypes = ['select', 'checkbox', 'radio', 'password'];
+    public static array $hasPseudo = ['select', 'checkbox', 'radio'];
 
     /**
      * Create a new component instance.
@@ -33,6 +36,8 @@ class Input extends UiComponent
         bool $noErrors = false,
         array $dataList = [],
         bool $forgetValue = false,
+        string $pseudoIcon = '',
+        string $iconClasses = '',
     ) {
         $this->setProperties([
             'bind' => $bind,
@@ -45,6 +50,8 @@ class Input extends UiComponent
             'noErrors' => $noErrors,
             'dataList' => $dataList,
             'forgetValue' => $forgetValue,
+            'pseudoIcon' => $pseudoIcon,
+            'iconClasses' => $iconClasses,
         ]);
     }
 

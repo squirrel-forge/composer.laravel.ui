@@ -8,7 +8,10 @@ use SquirrelForge\Laravel\Ui\Service;
 /**
  * Class SqfUi
  *
- * @method static void canonical(string $url) Set runtime canonical url.
+ * @method static array getVersions() Get all defined versions.
+ * @method static void setVersion(string $name, string $version) Set name to version in list.
+ * @method static void canonical(?string $url = null) Un/set runtime canonical url.
+ * @method static void removeCanonicalParams(?array $params = null, bool $replace = false) Remove canonical params.
  * @method static void meta(array $data, bool $replace = false) Set runtime meta tag/s.
  * @method static string metaTags() Get the page meta tags.
  * @method static void body(array $data, bool $replace = false) Set runtime body attributes.

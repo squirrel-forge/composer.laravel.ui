@@ -1,10 +1,12 @@
 # composer.laravel.ui
+
 ## Squirrel-Forge Laravel Ui Abstracts and Components
 
 ### Table of Contents
 
  - [View Components](#view-components)
  - [Document template](#document-template)
+ - [Debugger](#debugger)
 
 ## Module information
 
@@ -25,6 +27,7 @@ Composer repository entry:
 ### Fieldset
 ### Button
 ### Input
+### Modal
 
 ## Document template
 
@@ -77,3 +80,20 @@ SqfUi::body([
     'data-attribute' => 'value',
 ]);
 ```
+
+### Dynamic named attributes
+
+If needed, utilize the named attributes helper to allow for customizable attribute bags:
+
+```php
+SqfUi::attributes('named-element', [
+    'class' => 'element-class',
+    'data-attribute' => 'value',
+]);
+```
+
+```bladehtml
+<div {!! SqfUi::attributes('named-element', ['class' => 'extend-class']) !!}>
+```
+
+## Debugger

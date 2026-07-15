@@ -1,7 +1,7 @@
 {
     "name": "squirrel-forge/lara-ui",
     "description": "Squirrel-Forge Laravel Ui Abstracts and Components",
-    "version": "0.5.2",
+    "version": "0.6.0",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -13,17 +13,17 @@
         }
     ],
     "require": {
-        "php": "^8.1",
+        "php": "^8.3",
         "ext-mbstring": "*",
-        "laravel/framework": ">=10.0",
-        "squirrel-forge/lara-cs": "^0.8.0"
+        "laravel/framework": ">=11.0",
+        "squirrel-forge/lara-cs": "@dev"
     },
     "autoload": {
         "psr-4": {
             "SquirrelForge\\Laravel\\Ui\\": "src/"
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "extra": {
         "laravel": {
@@ -39,11 +39,6 @@
         {
             "type": "vcs",
             "url": "git@github.com:squirrel-forge/composer.laravel.cs.git",
-            "no-api": true
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:squirrel-forge/composer.laravel.ui.git",
             "no-api": true
         }
     ]

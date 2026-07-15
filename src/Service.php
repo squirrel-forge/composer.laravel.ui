@@ -5,6 +5,8 @@ namespace SquirrelForge\Laravel\Ui;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Illuminate\View\ComponentAttributeBag;
+use Illuminate\Foundation\Application as LaravelApplication;
+use const SquirrelForge\Laravel\CoreSupport\VERSION as CoreSupportVERSION;
 
 /**
  * Ui Service
@@ -12,15 +14,58 @@ use Illuminate\View\ComponentAttributeBag;
 class Service {
 
     /** @type string Package version. */
-    const VERSION = '0.5.2';
+    const string VERSION = '0.6.0';
+
+    /**
+     * @var array $versions Collection of software versions
+     */
+    protected array $versions = [];
+
+    /**
+     * Get version defaults
+     * @return array
+     */
+    protected function getVersionDefaults(): array
+    {
+        return [
+            'sqf-ui' => static::VERSION,
+            'sqf-cs' => CoreSupportVERSION,
+            'Laravel' => LaravelApplication::VERSION,
+            'PHP' => PHP_VERSION,
+        ];
+    }
+
+    /**
+     * Get version information
+     * @return array
+     */
+    public function getVersions(): array
+    {
+        $defaults = $this->getVersionDefaults();
+        return array_merge($this->versions, $defaults);
+    }
+
+    /**
+     * Set a version reference
+     * @param string $name
+     * @param string $version
+     * @return void
+     */
+    public function setVersion(string $name, string $version): void
+    {
+        $this->versions[$name] = $version;
+    }
 
     /** @var string|null $canonical Runtime custom canonical url. */
     protected ?string $canonical = null;
 
+    /** @var array|string[] $removeCanonicalParams Url parameters to remove for canonical links. */
+    protected array $removeCanonicalParams = ['fallbackPlaceholder'];
+
     /** @var array|string[] $noSlashTags Tags that should not have a closing slash when used as a single tag. */
     protected array $noSlashTags = ['meta', 'link'];
 
-    /** @var array $metaData Runtime meta data to be used. */
+    /** @var array $metaData Runtime metadata to be used. */
     protected array $metaData = [];
 
     /** @var ComponentAttributeBag $bodyAttributes Runtime body attributes to be used. */
@@ -42,21 +87,33 @@ class Service {
      * @param null|string $url
      * @return void
      */
-    public function canonical(string $url = null): void
+    public function canonical(?string $url = null): void
     {
         $this->canonical = $url;
     }
 
     /**
-     * Set runtime meta tags.
-     * @param array $data
+     * Set/remove runtime canonical url.
+     * @param null|array|string[] $params
      * @param bool $replace
      * @return void
      */
-    public function meta(array $data, bool $replace = false): void
+    public function removeCanonicalParams(?array $params = null, bool $replace = false): void
+    {
+        if ($replace) $this->removeCanonicalParams = [];
+        $this->removeCanonicalParams = array_merge($this->removeCanonicalParams, $params ?? []);
+    }
+
+    /**
+     * Set runtime meta tags.
+     * @param null|array $data
+     * @param bool $replace
+     * @return void
+     */
+    public function meta(?array $data = null, bool $replace = false): void
     {
         if ($replace) $this->metaData = [];
-        $this->metaData = array_merge($this->metaData, $data);
+        $this->metaData = array_merge($this->metaData, $data ?? []);
     }
 
     /**
@@ -111,19 +168,20 @@ class Service {
 
         // Render and return all tags
         foreach ($data as $attributes) {
-            $rendered[] = $this->renderTag($attributes);
+            $rendered[] = $this->renderTag('meta', $attributes);
         }
         return implode('', $rendered);
     }
 
     /**
      * Render tag.
+     * @param string $tag
      * @param array<string, string> $attributes
      * @return string
      */
-    public function renderTag(array $attributes): string
+    public function renderTag(string $tag, array $attributes): string
     {
-        $tag = $attributes['_tag'] ?? 'meta';
+        $tag = $attributes['_tag'] ?? $tag;
         $html = $attributes['_html'] ?? '';
         $text = $attributes['_text'] ?? '';
         if (!empty($text)) $html = htmlspecialchars($text);
@@ -165,7 +223,9 @@ class Service {
             $url = $this->canonical;
         } else if (!empty($current) && !in_array($current, config('sqf-ui.meta.excludeCanonicalRoutes', []))) {
             $params = Route::current()->parameters();
-            if (isset($params['fallbackPlaceholder'])) unset($params['fallbackPlaceholder']);
+            foreach ($this->removeCanonicalParams as $param) {
+                if (isset($params[$param])) unset($params[$param]);
+            }
             $url = route($current, $params);
         }
         return $url;

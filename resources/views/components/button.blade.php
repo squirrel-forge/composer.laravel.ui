@@ -3,7 +3,7 @@
     if (!empty($iconBefore) || !empty($iconAfter)) $attributes = $attributes->merge(['class' => 'ui-button--icon']);
 
     // Add no label modifier if no label is set
-    if (empty($label) || isset($slot) && $slot->isEmpty()) $attributes = $attributes->merge(['class' => 'ui-button--label-none']);
+    if (empty($label) && (!isset($slot) || isset($slot) && $slot->isEmpty())) $attributes = $attributes->merge(['class' => 'ui-button--label-none']);
 @endphp
 <{!! !empty($attributes->get('href')) ? 'a' : 'button' !!} {!! $attributes->merge(['class' => 'ui-button']) !!}>
     @if(!empty($iconBefore))

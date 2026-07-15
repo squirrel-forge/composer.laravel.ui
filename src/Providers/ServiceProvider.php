@@ -8,6 +8,7 @@ use SquirrelForge\Laravel\Ui\View\Components\Button;
 use SquirrelForge\Laravel\Ui\View\Components\Fieldset;
 use SquirrelForge\Laravel\Ui\View\Components\Form;
 use SquirrelForge\Laravel\Ui\View\Components\Input;
+use SquirrelForge\Laravel\Ui\View\Components\Modal;
 
 /**
  * Module service provider
@@ -34,11 +35,11 @@ class ServiceProvider extends Provider {
         $this->loadViewsFrom($view_src, 'sqf-ui');
 
         // Publish views
-        $this->publishes([$view_src => resource_path('views/vendor/sqf-ui')], 'views');
+        $this->publishes([$view_src => resource_path('views/vendor/sqf-ui')], ['sqf-ui', 'views']);
 
         // Publish configs
         $config_src = implode(DIRECTORY_SEPARATOR, [$base_dir, 'resources', 'config', '']);
-        $this->publishes([$config_src . 'config.php' => config_path('sqf-ui.php')], 'config');
+        $this->publishes([$config_src . 'config.php' => config_path('sqf-ui.php')], ['sqf-ui', 'config']);
 
         // Publish public assets
         // $public_src = implode(DIRECTORY_SEPARATOR, [$base_dir, 'resources', 'public', '']);
@@ -49,5 +50,6 @@ class ServiceProvider extends Provider {
         Blade::component('sqf-ui::fieldset', Fieldset::class);
         Blade::component('sqf-ui::form', Form::class);
         Blade::component('sqf-ui::input', Input::class);
+        Blade::component('sqf-ui::modal', Modal::class);
     }
 }
