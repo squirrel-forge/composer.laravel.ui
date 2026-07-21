@@ -43,6 +43,7 @@ class Button extends UiComponent
         string $iconBeforeClasses = '',
         string $iconAfter = '',
         string $iconAfterClasses = '',
+        array $arbitrary = [],
     ) {
         $this->setProperties([
             'label' => $label,
@@ -53,6 +54,7 @@ class Button extends UiComponent
             'iconBeforeClasses' => $iconBeforeClasses,
             'iconAfter' => $iconAfter,
             'iconAfterClasses' => $iconAfterClasses,
+            'arbitrary' => $arbitrary,
         ]);
     }
 

@@ -31,6 +31,7 @@ class Fieldset extends UiComponent
         string $required = '',
         string $wrapTag = 'div',
         string $wrapClasses = '',
+        array $arbitrary = [],
     ) {
         $this->setProperties([
             'type' => $type,
@@ -38,6 +39,7 @@ class Fieldset extends UiComponent
             'required' => $required,
             'wrapTag' => $wrapTag,
             'wrapClasses' => $wrapClasses,
+            'arbitrary' => $arbitrary,
         ]);
     }
 }

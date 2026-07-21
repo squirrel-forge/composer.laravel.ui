@@ -43,6 +43,7 @@ class Form extends UiComponent
         bool $noWrap = false,
         string $wrapTag = 'div',
         string $wrapClasses = '',
+        array $arbitrary = [],
     ) {
         $this->setProperties([
             'route' => $route,
@@ -53,6 +54,7 @@ class Form extends UiComponent
             'noWrap' => $noWrap,
             'wrapTag' => $wrapTag,
             'wrapClasses' => $wrapClasses,
+            'arbitrary' => $arbitrary,
         ]);
     }
 

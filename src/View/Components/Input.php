@@ -38,6 +38,7 @@ class Input extends UiComponent
         bool $forgetValue = false,
         string $pseudoIcon = '',
         string $iconClasses = '',
+        array $arbitrary = [],
     ) {
         $this->setProperties([
             'bind' => $bind,
@@ -52,6 +53,7 @@ class Input extends UiComponent
             'forgetValue' => $forgetValue,
             'pseudoIcon' => $pseudoIcon,
             'iconClasses' => $iconClasses,
+            'arbitrary' => $arbitrary,
         ]);
     }
 

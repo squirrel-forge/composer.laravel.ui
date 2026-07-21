@@ -46,7 +46,8 @@ class Modal extends UiComponent
         bool $noHeader = false,
         bool $noHeaderControls = false,
         bool $noFooter = false,
-        bool $noFooterControls = false
+        bool $noFooterControls = false,
+        array $arbitrary = [],
     ) {
         $this->setProperties([
             'mode' => $mode,
@@ -58,6 +59,7 @@ class Modal extends UiComponent
             'noHeaderControls' => $noHeaderControls,
             'noFooter' => $noFooter,
             'noFooterControls' => $noFooterControls,
+            'arbitrary' => $arbitrary,
         ]);
     }
 }
