@@ -4,8 +4,8 @@ namespace SquirrelForge\Laravel\Ui\View\Components;
 
 use Closure;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Log;
 use Illuminate\View\Component as ViewComponent;
+use SquirrelForge\Laravel\Ui\Exceptions\UnknownMediaReferenceException;
 
 /**
  * Ui Component
@@ -14,10 +14,10 @@ use Illuminate\View\Component as ViewComponent;
 abstract class UiComponent extends ViewComponent
 {
     /** @var array $boolFalseValues Values that match an explicit false. */
-    public static array $boolFalseValues = [0, false, 'false', 'off'];
+    public static array $boolFalseValues = [0, false, 'false', 'off', 'no'];
 
     /** @var array $boolTrueValues Values that match an explicit true. */
-    public static array $boolTrueValues = [1, true, 'true', 'on'];
+    public static array $boolTrueValues = [1, true, 'true', 'on', 'yes'];
 
     /**
      * Get merged falsy values
@@ -66,6 +66,42 @@ abstract class UiComponent extends ViewComponent
         return false;
     }
 
+    /** @var array|string[] $mediaReferences List of media attribute values by name. */
+    public static array $mediaReferences = [
+        'mobile' => '(max-width: 767px)',
+        'tablet' => '(min-width: 768px) and (max-width: 1024px)',
+        'desktop' => '(min-width: 1025px)',
+    ];
+
+    /**
+     * Resolve media reference name
+     * @param string $name
+     * @return string
+     * @throws UnknownMediaReferenceException
+     */
+    public static function resolveMediaReference(string $name): string
+    {
+        if (isset(static::$mediaReferences[$name])) return static::$mediaReferences[$name];
+        return $name;
+    }
+
+    /** @var array $arbitrary Arbitrary properties set at runtime. */
+    public array $arbitrary;
+
+    /**
+     * Set arbitrary attributes for component
+     * @param array $data
+     * @param array $attributes
+     * @return void
+     */
+    protected function setArbitraryAttributes(array &$data, array $attributes): void
+    {
+        $this->setProperties($attributes);
+        foreach ($attributes as $name => $value) {
+            $data['attributes'][$name] = $value;
+        }
+    }
+
     /**
      * Set component properties
      * @param array $props
@@ -84,16 +120,15 @@ abstract class UiComponent extends ViewComponent
     }
 
     /**
-     * Get the view / contents that represent the component.
+     * Get the view / contents that represents the component.
      * @return View|Closure|string
      */
     public function render(): View|Closure|string
     {
         $name = str_replace('\\','.', mb_strtolower(explode('\\View\\', static::class)[1]));
         return function (array $data) use ($name) {
-            if (method_exists($this, 'extendViewData')) {
-                $this->extendViewData($data, $name);
-            }
+            if (!empty($this->arbitrary)) $this->setArbitraryAttributes($data, $this->arbitrary);
+            if (method_exists($this, 'extendViewData')) $this->extendViewData($data, $name);
             return view('sqf-ui::' . $name, $data);
         };
     }

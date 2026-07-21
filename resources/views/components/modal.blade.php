@@ -27,7 +27,7 @@
                                 data-modal="ctrl:close"
                                 class="ui-button--label-hidden ui-modal__button ui-modal__button--close"
                                 icon-before="close"
-                                :label="__('sqf-ms.modal.buttons.close')"
+                                :label="__('sqf-ui.modal.buttons.close')"
                             />
                         </div>
                     @endif

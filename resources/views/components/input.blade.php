@@ -1,5 +1,5 @@
 @php
-    $_internal_wrap_classes = 'ui-input ui-input--' . $attributes['type'] . ' ' . ($_internal_wrap_classes ?? '');
+    $_internal_wrap_classes = 'ui-input ui-input--' . $attributes['type'] . ($_internal_wrap_classes ?? '');
     if (!empty($attributes->get('required'))) {
         $_internal_wrap_classes .= ' ui-input--required';
     }

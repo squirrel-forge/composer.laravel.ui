@@ -4,11 +4,6 @@ namespace SquirrelForge\Laravel\Ui\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider as Provider;
-use SquirrelForge\Laravel\Ui\View\Components\Button;
-use SquirrelForge\Laravel\Ui\View\Components\Fieldset;
-use SquirrelForge\Laravel\Ui\View\Components\Form;
-use SquirrelForge\Laravel\Ui\View\Components\Input;
-use SquirrelForge\Laravel\Ui\View\Components\Modal;
 
 /**
  * Module service provider
@@ -30,6 +25,13 @@ class ServiceProvider extends Provider {
     public function boot() {
         $base_dir = dirname(__DIR__, 2);
 
+        // Load translations
+        $lang_src = implode(DIRECTORY_SEPARATOR, [$base_dir, 'resources', 'lang', '']);
+        $this->loadTranslationsFrom($lang_src, 'sqf-ui' );
+
+        // Publish translations
+        $this->publishes([$lang_src => lang_path('vendor/sqf-ui')], ['sqf-ui', 'lang']);
+
         // Load views
         $view_src = implode(DIRECTORY_SEPARATOR, [$base_dir, 'resources', 'views', '']);
         $this->loadViewsFrom($view_src, 'sqf-ui');
@@ -46,10 +48,6 @@ class ServiceProvider extends Provider {
         // $this->publishes([$public_src => public_path('vendor/sqf-ui')], 'public');
 
         // Components
-        Blade::component('sqf-ui::button', Button::class);
-        Blade::component('sqf-ui::fieldset', Fieldset::class);
-        Blade::component('sqf-ui::form', Form::class);
-        Blade::component('sqf-ui::input', Input::class);
-        Blade::component('sqf-ui::modal', Modal::class);
+        Blade::componentNamespace('SquirrelForge\\Laravel\\Ui\\View\\Components', 'sqf-ui');
     }
 }

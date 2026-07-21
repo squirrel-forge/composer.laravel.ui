@@ -10,7 +10,7 @@
         <legend class="ui-fieldset__legend">{!! $legend !!}</legend>
     @endif
     <div class="ui-fieldset__content">
-        <{!! $wrapTag ?? 'div' !!} class="ui-wrap ui-wrap--fieldset{!! !empty($type) ? 'ui-wrap--fieldset-' . $type : '' !!} {{ $wrapClasses ?? '' }}">
+        <{!! $wrapTag ?? 'div' !!} class="ui-wrap ui-wrap--fieldset {!! !empty($type) ? 'ui-wrap--fieldset-' . $type : '' !!} {{ $wrapClasses ?? '' }}">
             {!! $slot !!}
         </{!! $wrapTag ?? 'div' !!}>
         @if(!empty($required))
