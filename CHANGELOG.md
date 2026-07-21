@@ -4,5 +4,5 @@
 
 ## Changelog
 
-### 0.7.0
+### 0.7.1
 Current prototype release.
