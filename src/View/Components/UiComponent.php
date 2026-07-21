@@ -96,10 +96,11 @@ abstract class UiComponent extends ViewComponent
      */
     protected function setArbitraryAttributes(array &$data, array $attributes): void
     {
-        $this->setProperties($attributes);
         foreach ($attributes as $name => $value) {
+            if (property_exists($this, $name)) continue;
             $data['attributes'][$name] = $value;
         }
+        $this->setProperties($attributes);
     }
 
     /**
