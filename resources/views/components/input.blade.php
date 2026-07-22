@@ -11,7 +11,7 @@
     }
 @endphp
 <label {!! $attributes->merge(['class' => $_internal_wrap_classes])->filter(fn ($value, $key) => $key === 'class') !!}>
-    @if(!empty($label) && !\SquirrelForge\Laravel\Ui\View\Components\UiComponent::isTruthy($labelAfter, ['label-after']))
+    @if(!empty($label) && !SqfUi::isTruthy($labelAfter, ['label-after']))
         <{!! $labelTag ?? 'strong' !!} class="ui-input__label {{ $labelClasses }}">{!! $label !!}</{!! $labelTag ?? 'strong' !!}>
     @endif
     <span class="ui-input__input">
@@ -67,7 +67,7 @@
             @endif
         @endif
     </span>
-    @if(!empty($label) && \SquirrelForge\Laravel\Ui\View\Components\UiComponent::isTruthy($labelAfter, ['label-after']))
+    @if(!empty($label) && SqfUi::isTruthy($labelAfter, ['label-after']))
         <{!! $labelTag ?? 'strong' !!} class="ui-input__label {{ $labelClasses }}">{!! $label !!}</{!! $labelTag ?? 'strong' !!}>
     @endif
     <{!! $errorTag ?? 'em' !!} class="ui-input__error">

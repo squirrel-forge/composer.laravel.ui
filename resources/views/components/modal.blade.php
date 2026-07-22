@@ -3,7 +3,7 @@
     if (empty($mode)) $mode = 'modal';
 
     // Add scroll class and mode attribute
-    $isOuterScroll = \SquirrelForge\Laravel\Ui\View\Components\UiComponent::isTruthy($outerScroll, ['outer-scroll']);
+    $isOuterScroll = SqfUi::isTruthy($outerScroll, ['outer-scroll']);
     $attributes = $attributes->merge([
         'class' => 'ui-modal--' . ($isOuterScroll ? 'outer' : 'inner') . '-scroll',
         'data-mode' => $mode,
@@ -13,7 +13,7 @@
 <section {!! $attributes->merge(['class' => 'ui-modal', 'is' => 'ui-modal']) !!}>
     <div class="ui-modal__wrap" {!! $isOuterScroll ? 'tabindex="0"' : '' !!}>
         <dialog class="ui-modal__dialog">
-            @if(!\SquirrelForge\Laravel\Ui\View\Components\UiComponent::isTruthy($noHeader, ['no-header']))
+            @if(!SqfUi::isTruthy($noHeader, ['no-header']))
                 <div class="ui-modal__dialog-header">
                     @if(!empty($title))
                         <h3 class="ui-modal__dialog-title">{!! $title !!}</h3>
@@ -21,7 +21,7 @@
                     @if(isset($header) && !$header->isEmpty())
                         {!! $header !!}
                     @endif
-                    @if(!\SquirrelForge\Laravel\Ui\View\Components\UiComponent::isTruthy($noHeaderControls, ['no-header-controls']))
+                    @if(!SqfUi::isTruthy($noHeaderControls, ['no-header-controls']))
                         <div class="ui-modal__dialog-controls">
                             <x-sqf-ui::button
                                 data-modal="ctrl:close"
@@ -41,17 +41,15 @@
                 <div class="ui-modal__dialog-content">
                     @if(isset($slot) && !$slot->isEmpty())
                         {!! $slot !!}
-                    @elseif(!empty($template))
-                        @include($template, $vars ?? [])
                     @endif
                 </div>
             </div>
-            @if(!\SquirrelForge\Laravel\Ui\View\Components\UiComponent::isTruthy($noFooter, ['no-footer']))
+            @if(!SqfUi::isTruthy($noFooter, ['no-footer']))
                 <div class="ui-modal__dialog-footer">
                     @if(isset($footer) && !$footer->isEmpty())
                         {!! $footer !!}
                     @endif
-                    @if(!\SquirrelForge\Laravel\Ui\View\Components\UiComponent::isTruthy($noFooterControls, ['no-footer-controls']))
+                    @if(!SqfUi::isTruthy($noFooterControls, ['no-footer-controls']))
                         <div class="ui-modal__dialog-controls">
                             @if($mode == 'modal')
                                 <x-sqf-ui::button

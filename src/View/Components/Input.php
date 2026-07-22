@@ -4,6 +4,7 @@ namespace SquirrelForge\Laravel\Ui\View\Components;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use SquirrelForge\Laravel\Ui\Facades\SqfUi;
 
 class Input extends UiComponent
 {
@@ -61,7 +62,7 @@ class Input extends UiComponent
     {
         if (empty($value)) return null;
         if ($value instanceof Model) return $value;
-        if (static::isTruthy($value, ['bind'])) return true;
+        if (SqfUi::isTruthy($value, ['bind'])) return true;
         return false;
     }
 
@@ -89,14 +90,14 @@ class Input extends UiComponent
                             if (old($name) === $data['attributes']['value']) {
                                 $data['attributes']['checked'] = '';
                             }
-                        } else if (static::isTruthy(old($name))) {
+                        } else if (SqfUi::isTruthy(old($name))) {
                             $data['attributes']['checked'] = '';
                         }
                     } else if (!empty($data['attributes']['value'])) {
                         if (old($name) ?? $this->bind->{$name} === $data['attributes']['value']) {
                             $data['attributes']['checked'] = '';
                         }
-                    } else if (static::isTruthy(old($name) ?? $this->bind->{$name})) {
+                    } else if (SqfUi::isTruthy(old($name) ?? $this->bind->{$name})) {
                         $data['attributes']['checked'] = '';
                     }
                 }

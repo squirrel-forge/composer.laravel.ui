@@ -40,8 +40,6 @@ class Modal extends UiComponent
     public function __construct(
         string $mode = '',
         string $title = '',
-        string $template = '',
-        array $vars = [],
         bool $outerScroll = false,
         bool $noHeader = false,
         bool $noHeaderControls = false,
@@ -52,8 +50,6 @@ class Modal extends UiComponent
         $this->setProperties([
             'mode' => $mode,
             'title' => $title,
-            'template' => $template,
-            'vars' => $vars,
             'outerScroll' => $outerScroll,
             'noHeader' => $noHeader,
             'noHeaderControls' => $noHeaderControls,

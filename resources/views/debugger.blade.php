@@ -12,7 +12,7 @@
         data-pv="top"
 />
 <x-sqf-ui::modal id="sqf-ui-debugger" title="squirrel-forge ui debugger" no-footer-controls>
-    @foreach(\SquirrelForge\Laravel\Ui\Facades\SqfUi::getVersions() as $name => $version)
+    @foreach(SqfUi::getVersions() as $name => $version)
         <p>{{ $name }} {{ $version }}</p>
     @endforeach
     <figure>

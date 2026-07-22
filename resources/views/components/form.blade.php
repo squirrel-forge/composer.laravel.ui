@@ -16,17 +16,17 @@
     }
 @endphp
 <form is="ui-form" {!! $attributes->merge(['class' => 'ui-form']) !!}>
-    @if(!\SquirrelForge\Laravel\Ui\View\Components\UiComponent::isTruthy($noCsrf, ['no-csrf']))
+    @if(!SqfUi::isTruthy($noCsrf, ['no-csrf']))
         @csrf
     @endif
     @if($realMethod !== $attributes->get('method'))
         @method($realMethod)
     @endif
-    @if(!\SquirrelForge\Laravel\Ui\View\Components\UiComponent::isTruthy($noWrap, ['no-wrap']))
+    @if(!SqfUi::isTruthy($noWrap, ['no-wrap']))
     <{!! $wrapTag ?? 'div' !!} class="ui-wrap ui-wrap--form {{ $wrapClasses ?? '' }}">
     @endif
         {!! $slot !!}
-    @if(!\SquirrelForge\Laravel\Ui\View\Components\UiComponent::isTruthy($noWrap, ['no-wrap']))
+    @if(!SqfUi::isTruthy($noWrap, ['no-wrap']))
     </{!! $wrapTag ?? 'div' !!}>
     @endif
 </form>

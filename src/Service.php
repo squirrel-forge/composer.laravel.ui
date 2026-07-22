@@ -14,7 +14,7 @@ use const SquirrelForge\Laravel\CoreSupport\VERSION as CoreSupportVERSION;
 class Service {
 
     /** @type string Package version. */
-    const string VERSION = '0.6.1';
+    const string VERSION = '0.8.0';
 
     /**
      * @var array $versions Collection of software versions
@@ -74,12 +74,100 @@ class Service {
     /** @var ComponentAttributeBag[] $attributeBags Runtime dynamic attributes to be used. */
     protected array $attributeBags = [];
 
+    /** @var array $boolFalseValues Values that match an explicit false. */
+    public array $boolFalseValues = [0, false, 'false', 'off', 'no'];
+
+    /** @var array $boolTrueValues Values that match an explicit true. */
+    public array $boolTrueValues = [1, true, 'true', 'on', 'yes'];
+
+    /** @var array|string[] $mediaReferences List of media attribute values by name. */
+    public array $mediaReferences = [
+        'mobile-mini' => '(max-width: 320px)',
+        'mobile-small' => '(max-width: 374px)',
+        'mobile-classic' => '(max-width: 480px)',
+        'mobile-medium' => '(max-width: 560px)',
+        'mobile-large' => '(max-width: 640px)',
+        'mobile' => '(max-width: 767px)',
+        'mobile-tablet-portrait' => '(max-width: 991px)',
+        'mobile-tablet' => '(max-width: 1024px)',
+        'tablet' => '(min-width: 768px) and (max-width: 1024px)',
+        'tablet-portrait' => '(min-width: 768px) and (max-width: 991px)',
+        'tablet-landscape' => '(min-width: 992px) and (max-width: 1024px)',
+        'tablet-desktop' => '(min-width: 768px)',
+        'tablet-landscape-desktop' => '(min-width: 992px)',
+        'desktop' => '(min-width: 1025px)',
+        'desktop-nano' => '(min-width: 1152px)',
+        'desktop-mini' => '(min-width: 1200px)',
+        'desktop-small' => '(min-width: 1366px)',
+        'desktop-medium' => '(min-width: 1440px)',
+        'desktop-classic' => '(min-width: 1600px)',
+        'desktop-large' => '(min-width: 1920px)',
+    ];
+
     /**
      * Construct the service.
      */
     public function __construct()
     {
         $this->bodyAttributes = new ComponentAttributeBag([]);
+    }
+
+    /**
+     * Get merged falsy values
+     * @param array $with
+     * @return array
+     */
+    public function boolFalsy(array $with = []): array
+    {
+        return array_merge([], $this->boolFalseValues, $with);
+    }
+
+    /**
+     * Get merged truthy values
+     * @param array $with
+     * @return array
+     */
+    public function boolTruthy(array $with = []): array
+    {
+        return array_merge([], $this->boolTrueValues, $with);
+    }
+
+    /**
+     * Value is falsy
+     * @param mixed $value
+     * @param array $falsyToo
+     * @return bool
+     */
+    public function isFalsy(mixed $value, array $falsyToo = []): bool
+    {
+        if (isset($value) && is_string($value)) $value = mb_strtolower(trim($value));
+        if (empty($value)) return true;
+        if (in_array($value, $this->boolFalsy($falsyToo), true)) return true;
+        return false;
+    }
+
+    /**
+     * Value is truthy
+     * @param mixed $value
+     * @param array $truthyToo
+     * @return bool
+     */
+    public function isTruthy(mixed $value, array $truthyToo = []): bool
+    {
+        if (isset($value) && is_string($value)) $value = mb_strtolower(trim($value));
+        if (in_array($value, $this->boolTruthy($truthyToo), true)) return true;
+        return false;
+    }
+
+    /**
+     * Resolve media reference name
+     * @param string $name
+     * @return string
+     */
+    public function resolveMediaReference(string $name): string
+    {
+        if (isset($this->mediaReferences[$name])) return $this->mediaReferences[$name];
+        return $name;
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace SquirrelForge\Laravel\Ui\View\Components;
 
+use SquirrelForge\Laravel\Ui\Facades\SqfUi;
+
 /**
  * Ui Image
  */
@@ -10,30 +12,30 @@ class Img extends UiComponent
     /** @var string $asset Generates src for given asset. */
     public string $asset;
 
-    /** @var bool $relative Relative asset path. */
-    public bool $relative;
+    /** @var bool $absolute Absolute asset path. */
+    public bool $absolute;
 
-    /** @var bool $cache Append cache breaker to asset. */
+    /** @var bool $cache Do not append cache breaker to asset. */
     public bool $cache;
 
-    /** @var bool $secure Use https if not relative. */
-    public bool $secure;
+    /** @var bool $notSecure Do not use https if absolute. */
+    public bool $notSecure;
 
     /**
      * Create a new component instance.
      */
     public function __construct(
         string $asset = '',
-        bool $relative = false,
+        bool $absolute = false,
         bool $cache = false,
-        bool $secure = false,
+        bool $notSecure = false,
         array $arbitrary = [],
     ) {
         $this->setProperties([
             'asset' => $asset,
-            'relative' => $relative,
+            'absolute' => $absolute,
             'cache' => $cache,
-            'secure' => $secure,
+            'notSecure' => $notSecure,
             'arbitrary' => $arbitrary,
         ]);
     }
@@ -59,13 +61,13 @@ class Img extends UiComponent
 
             // Only set asset, if no src or only anchor
             if (!$has_src || !empty($anchor)) {
-                $data['attributes']['src'] = sqfAsset($this->asset, $this->relative, $this->cache, $this->secure) . $anchor;
+                $data['attributes']['src'] = sqfAsset($this->asset, !$this->absolute, !$this->cache, !$this->notSecure) . $anchor;
             }
         }
 
         // Resolve media references
         if (!empty($data['attributes']['media'])) {
-            $data['attributes']['media'] = static::resolveMediaReference($data['attributes']['media']);
+            $data['attributes']['media'] = SqfUi::resolveMediaReference($data['attributes']['media']);
         }
     }
 }
