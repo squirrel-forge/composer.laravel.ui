@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html dir="ltr" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html dir="{{ __('sqf-ui::document.dir') }}" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
 @yield('page_first','')
 @stack('preload')

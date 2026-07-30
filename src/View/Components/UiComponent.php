@@ -5,7 +5,6 @@ namespace SquirrelForge\Laravel\Ui\View\Components;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component as ViewComponent;
-use SquirrelForge\Laravel\Ui\Exceptions\UnknownMediaReferenceException;
 
 /**
  * Ui Component
@@ -28,7 +27,17 @@ abstract class UiComponent extends ViewComponent
             if (property_exists($this, $name)) continue;
             $data['attributes'][$name] = $value;
         }
-        $this->setProperties($attributes);
+    }
+
+    /**
+     * Set component arbitrary properties
+     * @param array $props
+     * @return void
+     */
+    protected function setArbitraryProperties(array $props): void
+    {
+        if (empty($props['arbitrary'])) return;
+        $this->setProperties($props['arbitrary']);
     }
 
     /**
@@ -41,11 +50,12 @@ abstract class UiComponent extends ViewComponent
         foreach ($props as $name => $value) {
             $method = 'input' . ucfirst($name);
             if (method_exists($this, $method)) {
-                $this->{$name} = $this->{$method}($value);
+                $this->{$name} = $this->{$method}($value, $props);
             } else {
                 $this->{$name} = $value;
             }
         }
+        $this->setArbitraryProperties($props);
     }
 
     /**

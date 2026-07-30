@@ -3,7 +3,7 @@
     if (empty($mode)) $mode = 'modal';
 
     // Add scroll class and mode attribute
-    $isOuterScroll = SqfUi::isTruthy($outerScroll, ['outer-scroll']);
+    $isOuterScroll = \SquirrelForge\Laravel\Ui\Facades\SqfUi::isTruthy($outerScroll, ['outer-scroll']);
     $attributes = $attributes->merge([
         'class' => 'ui-modal--' . ($isOuterScroll ? 'outer' : 'inner') . '-scroll',
         'data-mode' => $mode,
@@ -27,7 +27,7 @@
                                 data-modal="ctrl:close"
                                 class="ui-button--label-hidden ui-modal__button ui-modal__button--close"
                                 icon-before="close"
-                                :label="__('sqf-ui.modal.buttons.close')"
+                                :label="__('sqf-ui::modal.buttons.close')"
                             />
                         </div>
                     @endif
@@ -38,11 +38,7 @@
         @else
             <div class="ui-modal__dialog-wrap">
         @endif
-                <div class="ui-modal__dialog-content">
-                    @if(isset($slot) && !$slot->isEmpty())
-                        {!! $slot !!}
-                    @endif
-                </div>
+                <div class="ui-modal__dialog-content">{!! $slot !!}</div>
             </div>
             @if(!SqfUi::isTruthy($noFooter, ['no-footer']))
                 <div class="ui-modal__dialog-footer">
@@ -56,27 +52,27 @@
                                     data-modal="ctrl:close"
                                     class="ui-modal__button ui-modal__button--close"
                                     icon-before="close-small"
-                                    :label="__('sqf-ms.modal.buttons.close')"
+                                    :label="__('sqf-ui::modal.buttons.close')"
                                 />
                             @elseif($mode == 'alert')
                                 <x-sqf-ui::button
                                     data-modal="ctrl:close"
                                     class="ui-modal__button ui-modal__button--ok"
                                     icon-before="check"
-                                    :label="__('sqf-ms.modal.buttons.ok')"
+                                    :label="__('sqf-ui::modal.buttons.ok')"
                                 />
                             @elseif($mode == 'confirm' || $mode == 'prompt')
                                 <x-sqf-ui::button
                                     data-modal="ctrl:close"
                                     class="ui-modal__button ui-modal__button--cancel"
                                     icon-before="close-small"
-                                    :label="__('sqf-ms.modal.buttons.cancel')"
+                                    :label="__('sqf-ui::modal.buttons.cancel')"
                                 />
                                 <x-sqf-ui::button
                                     :data-modal="'ctrl:' . $mode . '.confirm'"
                                     class="ui-modal__button ui-modal__button--confirm"
                                     icon-before="check"
-                                    :label="__('sqf-ms.modal.buttons.confirm')"
+                                    :label="__('sqf-ui::modal.buttons.confirm')"
                                 />
                             @endif
                         </div>

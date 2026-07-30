@@ -23,18 +23,29 @@ Composer repository entry:
 
 ## View Components
 
-### Form
-### Fieldset
+### Accordion
 ### Button
+### Fieldset
+### Form
+### Img
 ### Input
 ### Modal
+### Picture
+### Source
+### Video
+
+For local dev you may set a video path, that will be used to transform video urls to local urls.
+```dotenv
+SQF_UI_VIDEOS_LOCAL_PATH='/videos/'
+```
 
 ## Document template
 
-### Render structure
+### Render structure 
 
  - head
    - @section page_first
+   - @stack preload
    - Generated meta data.
    - @section page_meta
    - @stack styles

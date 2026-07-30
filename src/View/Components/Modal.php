@@ -16,12 +16,6 @@ class Modal extends UiComponent
     /** @var string $title Modal header title. */
     public string $title;
 
-    /** @var string $template Content template name. */
-    public string $template;
-
-    /** @var array $vars Content template variables. */
-    public array $vars;
-
     /** @var bool $noHeader Do not add header container. */
     public bool $noHeader;
 
@@ -38,7 +32,7 @@ class Modal extends UiComponent
      * Create a new component instance.
      */
     public function __construct(
-        string $mode = '',
+        string $mode = 'modal',
         string $title = '',
         bool $outerScroll = false,
         bool $noHeader = false,

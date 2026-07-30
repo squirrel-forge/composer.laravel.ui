@@ -2,6 +2,7 @@
 
 namespace SquirrelForge\Laravel\Ui;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Illuminate\View\ComponentAttributeBag;
@@ -14,7 +15,7 @@ use const SquirrelForge\Laravel\CoreSupport\VERSION as CoreSupportVERSION;
 class Service {
 
     /** @type string Package version. */
-    const string VERSION = '0.8.0';
+    const string VERSION = '0.9.0';
 
     /**
      * @var array $versions Collection of software versions
@@ -171,6 +172,16 @@ class Service {
     }
 
     /**
+     * Sanitize route name
+     * @param string $name
+     * @return string
+     */
+    public function sanitizeRouteName(string $name): string
+    {
+        return Str::slug(preg_replace('/[.:]+/', '-', $name),'-');
+    }
+
+    /**
      * Set/remove runtime canonical url.
      * @param null|string $url
      * @return void
@@ -306,9 +317,7 @@ class Service {
     {
         $realRouteName = Route::currentRouteName();
         $routeName = 'undefined';
-        if (!empty($realRouteName)) {
-            $routeName = Str::slug(preg_replace('/[.:]+/', '-', $realRouteName),'-');
-        }
+        if (!empty($realRouteName)) $routeName = $this->sanitizeRouteName($realRouteName);
         $defaultClass = config('sqf-ui.body.defaultClass', '');
         $routeClassPrefix = config('sqf-ui.body.routeClassPrefix', '');
         $attributes = [];
@@ -336,5 +345,48 @@ class Service {
             $url = route($current, $params);
         }
         return $url;
+    }
+
+    /**
+     * Process video source urls
+     * @param array $sources
+     * @param null|string $localPath
+     * @return array
+     */
+    public function processVideoSources(array $sources, ?string $localPath = null): array
+    {
+        $this->loopVideoSources($sources, function (&$sources, $index) use ($localPath) {
+            if (isset($sources[$index]['responsive']) && is_array($sources[$index]['responsive'])) {
+                $this->loopVideoSources($sources[$index]['responsive'], null, $localPath);
+            }
+        }, $localPath);
+        return $sources;
+    }
+
+    /**
+     * Loop video sources
+     * @param array $sources
+     * @param callable|null $afterEach
+     * @param null|string $localPath
+     * @return void
+     */
+    public function loopVideoSources(array &$sources, callable $afterEach = null, ?string $localPath = null): void
+    {
+        if (!isset($localPath)) $localPath = config('sqf-ui.videos.localPath');
+        $local = App::environment('local');
+        foreach ($sources as $index => $source) {
+            if (mb_substr($sources[$index]['src'], 0, 1) === '/') {
+                $sources[$index]['src'] = sqfAsset($sources[$index]['src']);
+            } else if ($local && isset($localPath)) {
+                $sources[$index]['src'] = sqfAsset($localPath . basename($sources[$index]['src']));
+            }
+            if (isset($sources[$index]['poster']) && mb_substr($sources[$index]['poster'], 0, 1) === '/') {
+                $sources[$index]['poster'] = sqfAsset($sources[$index]['poster']);
+            }
+            if (isset($sources[$index]['vtt']['url']) && mb_substr($sources[$index]['vtt']['url'], 0, 1) === '/') {
+                $sources[$index]['vtt']['url'] = sqfAsset($sources[$index]['vtt']['url']);
+            }
+            if (isset($afterEach)) call_user_func_array($afterEach, [&$sources, $index]);
+        }
     }
 }

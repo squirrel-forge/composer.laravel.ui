@@ -24,6 +24,8 @@ use SquirrelForge\Laravel\Ui\Service;
  * @method static \Illuminate\View\ComponentAttributeBag attributes(string $name, array $attributes, bool $replace = false) Set/get runtime named attributes
  * @method static null|string getCanonicalUrl() Get canonical url.
  * @method static string renderTag(array $attributes) Render tag.
+ * @method static array processVideoSources(array $sources, string $localPath = '') Prepare video data.
+ * @method static void loopVideoSources(array &$sources, callable $afterEach = null, string $localPath = '') Loop video sources.
  */
 class SqfUi extends Facade {
 

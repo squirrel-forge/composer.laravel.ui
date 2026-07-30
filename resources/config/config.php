@@ -42,4 +42,8 @@ return [
          */
         'routeClassPrefix' => 'ui-page--',
     ],
+
+    'videos' => [
+        'localPath' => env('SQF_UI_VIDEOS_LOCAL_PATH'),
+    ],
 ];
