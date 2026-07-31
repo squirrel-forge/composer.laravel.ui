@@ -15,6 +15,9 @@ abstract class UiComponent extends ViewComponent
     /** @var array $arbitrary Arbitrary properties set at runtime. */
     public array $arbitrary;
 
+    /** @var string $viewPrefix Default view prefix. */
+    protected string $viewPrefix = 'sqf-ui::';
+
     /**
      * Set arbitrary attributes for component
      * @param array $data
@@ -68,7 +71,7 @@ abstract class UiComponent extends ViewComponent
         return function (array $data) use ($name) {
             if (!empty($this->arbitrary)) $this->setArbitraryAttributes($data, $this->arbitrary);
             if (method_exists($this, 'extendViewData')) $this->extendViewData($data, $name);
-            return view('sqf-ui::' . $name, $data);
+            return view($this->viewPrefix . $name, $data);
         };
     }
 }

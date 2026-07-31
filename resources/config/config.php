@@ -43,7 +43,15 @@ return [
         'routeClassPrefix' => 'ui-page--',
     ],
 
+    /**
+     * Video component related options
+     */
     'videos' => [
+
+        /**
+         * Defines a path to be used as prefix with the *basename()* of the url
+         * for local environment only.
+         */
         'localPath' => env('SQF_UI_VIDEOS_LOCAL_PATH'),
     ],
 ];

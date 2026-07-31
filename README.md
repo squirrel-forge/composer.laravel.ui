@@ -108,3 +108,9 @@ SqfUi::attributes('named-element', [
 ```
 
 ## Debugger
+
+## Known bugs/issues
+
+When publishing language files the target directory might need to be adjusted manually.
+
+

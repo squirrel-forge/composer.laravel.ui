@@ -16,12 +16,6 @@ class Fieldset extends UiComponent
     /** @var string $required Set a required text */
     public string $required;
 
-    /** @var string $wrapTag Set inner wrapping tag type, default: div */
-    public string $wrapTag;
-
-    /** @var string $wrapClasses Set inner wrapping classes. */
-    public string $wrapClasses;
-
     /**
      * Create a new component instance.
      */
@@ -29,16 +23,12 @@ class Fieldset extends UiComponent
         string $type = '',
         string $legend = '',
         string $required = '',
-        string $wrapTag = 'div',
-        string $wrapClasses = '',
         array $arbitrary = [],
     ) {
         $this->setProperties([
             'type' => $type,
             'legend' => $legend,
             'required' => $required,
-            'wrapTag' => $wrapTag,
-            'wrapClasses' => $wrapClasses,
             'arbitrary' => $arbitrary,
         ]);
     }

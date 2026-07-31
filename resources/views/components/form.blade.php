@@ -15,6 +15,7 @@
         $attributes = $attributes->merge(['enctype' => 'multipart/form-data']);
     }
 @endphp
+@props(['wrapped'])
 <form is="ui-form" {!! $attributes->merge(['class' => 'ui-form']) !!}>
     @if(!SqfUi::isTruthy($noCsrf, ['no-csrf']))
         @csrf
@@ -22,11 +23,10 @@
     @if($realMethod !== $attributes->get('method'))
         @method($realMethod)
     @endif
-    @if(!SqfUi::isTruthy($noWrap, ['no-wrap']))
-    <{!! $wrapTag ?? 'div' !!} class="ui-wrap ui-wrap--form {{ $wrapClasses ?? '' }}">
+    @if(isset($wrapped) && !$wrapped->isEmpty())
+        <div {!! $wrapped->attributes->merge(['class' => 'ui-wrap ui-wrap--form']) !!}>
+            {!! $wrapped !!}
+        </div>
     @endif
-        {!! $slot !!}
-    @if(!SqfUi::isTruthy($noWrap, ['no-wrap']))
-    </{!! $wrapTag ?? 'div' !!}>
-    @endif
+    {!! $slot !!}
 </form>

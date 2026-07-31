@@ -5,16 +5,20 @@
     // Add legend modifier to fieldset.
     if (!empty($legend)) $attributes = $attributes->merge(['class' => 'ui-fieldset--legend']);
 @endphp
+@props(['wrapped'])
 <fieldset {!! $attributes->merge(['class' => 'ui-fieldset']) !!}>
     @if(!empty($legend))
         <legend class="ui-fieldset__legend">{!! $legend !!}</legend>
     @endif
     <div class="ui-fieldset__content">
-        <{!! $wrapTag ?? 'div' !!} class="ui-wrap ui-wrap--fieldset {!! !empty($type) ? 'ui-wrap--fieldset-' . $type : '' !!} {{ $wrapClasses ?? '' }}">
-            {!! $slot !!}
-        </{!! $wrapTag ?? 'div' !!}>
+        @if(isset($wrapped) && !$wrapped->isEmpty())
+            <div {!! $wrapped->attributes->merge(['class' => 'ui-wrap ui-wrap--fieldset ui-wrap--fieldset-' . $type]) !!}>
+                {!! $wrapped !!}
+            </div>
+        @endif
+        {!! $slot !!}
         @if(!empty($required))
-            <div class="ui-fieldset__required"><p><em>{!! $required !!}</em></p></div>
+            <div class="ui-fieldset__required">{!! $required !!}</div>
         @endif
     </div>
 </fieldset>

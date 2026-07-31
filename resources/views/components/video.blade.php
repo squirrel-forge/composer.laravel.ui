@@ -47,7 +47,6 @@
                 </div>
             @endif
             <video class="ui-video__player" {!! $attributes->filter(fn ($value, $key) => $key !== 'class' && mb_substr($key, 0, 5) !== 'data-') !!}>{!! $slot !!}</video>
-            <div class="ui-video__loading"></div>
             <div class="ui-video__state ui-video__state--error">
                 @if(isset($error) && !$error->isEmpty())
                     {!! $error !!}
@@ -55,6 +54,8 @@
                     {!! __('sqf-ui::video.error') !!}
                @endif
             </div>
+            @if(isset($states) && !$states->isEmpty()){!! $states !!}@endif
+            <div class="ui-video__loading">@if(isset($loading) && !$loading->isEmpty()){!! $loading !!}@endif</div>
         </div>
     </div>
 </div>

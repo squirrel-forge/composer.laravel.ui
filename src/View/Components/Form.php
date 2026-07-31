@@ -22,15 +22,6 @@ class Form extends UiComponent
     /** @var bool $noCsrf Do not add the default _token/csrf hidden field. */
     public bool $noCsrf;
 
-    /** @var bool $noWrap Do not add the default form content wrapper. */
-    public bool $noWrap;
-
-    /** @var string $wrapTag Set inner wrapping tag type, default: div */
-    public string $wrapTag;
-
-    /** @var string $wrapClasses Set inner wrapping classes. */
-    public string $wrapClasses;
-
     /**
      * Create a new component instance.
      */
@@ -40,9 +31,6 @@ class Form extends UiComponent
         bool $absolute = false,
         bool $files = false,
         bool $noCsrf = false,
-        bool $noWrap = false,
-        string $wrapTag = 'div',
-        string $wrapClasses = '',
         array $arbitrary = [],
     ) {
         $this->setProperties([
@@ -51,9 +39,6 @@ class Form extends UiComponent
             'absolute' => $absolute,
             'files' => $files,
             'noCsrf' => $noCsrf,
-            'noWrap' => $noWrap,
-            'wrapTag' => $wrapTag,
-            'wrapClasses' => $wrapClasses,
             'arbitrary' => $arbitrary,
         ]);
     }

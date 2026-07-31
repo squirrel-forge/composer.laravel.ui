@@ -15,7 +15,7 @@ use const SquirrelForge\Laravel\CoreSupport\VERSION as CoreSupportVERSION;
 class Service {
 
     /** @type string Package version. */
-    const string VERSION = '0.9.0';
+    const string VERSION = '0.9.1';
 
     /**
      * @var array $versions Collection of software versions
