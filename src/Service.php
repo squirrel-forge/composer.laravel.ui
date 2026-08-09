@@ -15,7 +15,7 @@ use const SquirrelForge\Laravel\CoreSupport\VERSION as CoreSupportVERSION;
 class Service {
 
     /** @type string Package version. */
-    const string VERSION = '0.9.1';
+    const string VERSION = '0.9.2';
 
     /**
      * @var array $versions Collection of software versions
@@ -217,7 +217,7 @@ class Service {
             foreach ($data as $new_entry) {
                 $did_replace = false;
                 foreach ($this->metaData as $key => $old_entry) {
-                    if (call_user_func_array($replace, [$old_entry, $new_entry])) {
+                    if (call_user_func_array($replace, [&$old_entry, &$new_entry])) {
                         $this->metaData[$key] = $new_entry;
                         $did_replace = true;
                         break;
