@@ -9,6 +9,7 @@
     if (!empty($errorMessages)) {
         $_internal_wrap_classes .= ' ui-input--error ui-input--error-visible';
     }
+    $realType = $attributes['type'];
 @endphp
 <label {!! $attributes->merge(['class' => $_internal_wrap_classes])->filter(fn ($value, $key) => $key === 'class') !!}>
     @if(!empty($label) && !SqfUi::isTruthy($labelAfter, ['label-after']))
@@ -31,7 +32,7 @@
                     {!! $slot !!}
                 @endif
             </select>
-            @if(in_array($attributes['type'], \SquirrelForge\Laravel\Ui\View\Components\Input::$hasPseudo))
+            @if(in_array($realType, \SquirrelForge\Laravel\Ui\View\Components\Input::$hasPseudo))
                 <span class="ui-input__pseudo">
                     @if (isset($pseudo) && !$pseudo->isEmpty())
                         {!! $pseudo !!}
@@ -49,7 +50,7 @@
             <textarea {!! $attributes->filter(fn ($value, $key) => $key !== 'class') !!}>{{ $textAreaValue }}</textarea>
         @else
             <input {!! $attributes->filter(fn ($value, $key) => $key !== 'class') !!} />
-            @if(in_array($attributes['type'], \SquirrelForge\Laravel\Ui\View\Components\Input::$hasPseudo))
+            @if(in_array($realType, \SquirrelForge\Laravel\Ui\View\Components\Input::$hasPseudo))
                 <span class="ui-input__pseudo">
                     @if(isset($pseudo) && !$pseudo->isEmpty())
                         {!! $pseudo !!}

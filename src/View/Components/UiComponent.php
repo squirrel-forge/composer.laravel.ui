@@ -19,6 +19,16 @@ abstract class UiComponent extends ViewComponent
     protected string $viewPrefix = 'sqf-ui::';
 
     /**
+     * Get
+     * list of defined class properties
+     * @return array
+     */
+    protected function getClassVars(): array
+    {
+        return array_keys(get_class_vars(static::class));
+    }
+
+    /**
      * Set arbitrary attributes for component
      * @param array $data
      * @param array $attributes
@@ -27,7 +37,7 @@ abstract class UiComponent extends ViewComponent
     protected function setArbitraryAttributes(array &$data, array $attributes): void
     {
         foreach ($attributes as $name => $value) {
-            if (property_exists($this, $name)) continue;
+            if (in_array($name, $this->getClassVars())) continue;
             $data['attributes'][$name] = $value;
         }
     }

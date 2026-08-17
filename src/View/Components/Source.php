@@ -9,8 +9,11 @@ use SquirrelForge\Laravel\Ui\Facades\SqfUi;
  */
 class Source extends UiComponent
 {
-    /** @var string $asset Generates src for given asset. */
+    /** @var string $asset Generates srcset for given asset. */
     public string $asset;
+
+    /** @var string $video Generates src for given video. */
+    public string $video;
 
     /** @var bool $absolute Absolute asset path. */
     public bool $absolute;
@@ -26,6 +29,7 @@ class Source extends UiComponent
      */
     public function __construct(
         string $asset = '',
+        string $video = '',
         bool $absolute = false,
         bool $cache = false,
         bool $notSecure = false,
@@ -33,6 +37,7 @@ class Source extends UiComponent
     ) {
         $this->setProperties([
             'asset' => $asset,
+            'video' => $video,
             'absolute' => $absolute,
             'cache' => $cache,
             'notSecure' => $notSecure,
@@ -53,6 +58,22 @@ class Source extends UiComponent
 
             // Check for anchor to maintain
             $anchor = '';
+            $has_src = !empty($data['attributes']['srcset']);
+            if ($has_src && mb_substr($data['attributes']['srcset'], 0, 1) == '#') {
+                $anchor = $data['attributes']['srcset'];
+            }
+
+            // Only set asset, if no src or only anchor
+            if (!$has_src || !empty($anchor)) {
+                $data['attributes']['srcset'] = sqfAsset($this->asset, !$this->absolute, !$this->cache, !$this->notSecure) . $anchor;
+            }
+        }
+
+        // If video is defined
+        if (!empty($this->video)) {
+
+            // Check for anchor to maintain
+            $anchor = '';
             $has_src = !empty($data['attributes']['src']);
             if ($has_src && mb_substr($data['attributes']['src'], 0, 1) == '#') {
                 $anchor = $data['attributes']['src'];
@@ -60,7 +81,7 @@ class Source extends UiComponent
 
             // Only set asset, if no src or only anchor
             if (!$has_src || !empty($anchor)) {
-                $data['attributes']['src'] = sqfAsset($this->asset, !$this->absolute, !$this->cache, !$this->notSecure) . $anchor;
+                $data['attributes']['src'] = sqfAsset($this->video, !$this->absolute, !$this->cache, !$this->notSecure) . $anchor;
             }
         }
 

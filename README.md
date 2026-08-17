@@ -31,6 +31,7 @@ Composer repository entry:
 ### Input
 ### Modal
 ### Picture
+### Slidable
 ### Source
 ### Video
 
