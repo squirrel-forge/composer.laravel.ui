@@ -1,4 +1,4 @@
-<{!! $tag ?? 'ol' !!} is="ui-accordion" {!! $attributes->merge(['class' => 'ui-button']) !!}>
+<{!! $tag ?? 'ol' !!} is="ui-accordion" {!! $attributes->merge(['class' => 'ui-accordion']) !!}>
     @foreach($panels as $panel)
         <x-sqf-ui::accordion.panel :arbitrary="$panel->attributes ?? []">
             {{ $panel->text ?? '' }}{!! $panel->html ?? $panel->slot !!}
